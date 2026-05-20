@@ -4,10 +4,14 @@ import { Home } from './pages/Home';
 import { Error } from './pages/Error';
 import { TrainDetails } from './pages/TrainDetails'
 import { TrainBetweenStations } from './pages/TrainBetweenStations';
+import { ThemeProvider } from './context/ThemeContext';
+import { ThemeToggle } from './components/ThemeToggle';
 import './App.css';
 
 function App() {
   return (
+    <ThemeProvider>
+    <ThemeToggle />
     <div className="App">
         <Routes>
           <Route path='/' element={<Home/>} />
@@ -18,6 +22,7 @@ function App() {
           <Route path='*' element={<Error/>} />
         </Routes>
     </div>
+    </ThemeProvider>
   );
 }
 
