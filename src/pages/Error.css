@@ -1,0 +1,10 @@
+.error-div{
+    width: 100%;
+    height: 100%;
+}
+
+.error-div p {
+    font-size: 2rem;
+    padding:3rem;
+    font-weight: bold;
+}

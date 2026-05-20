@@ -1,0 +1,164 @@
+.train-btwn-stn-container{
+    text-align: center;
+    margin:auto;
+    width:82%;  
+}
+
+.train-btwn-stn-container h1:first-of-type{
+    margin-bottom: 0;
+}
+
+.train-btwn-stn-container h1:Last-of-type{
+    margin-top: 0.5em;
+}
+
+.to{
+    margin: 1rem;
+}
+
+.loading-trains{
+    font-size: 32px;;
+}
+
+.trains-section{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.train-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    margin: 1rem auto;
+    /* padding:1rem; */
+    width:29%;
+    border:2px solid var(--primary-font-color);
+    border-radius: 10px;
+}
+
+.train-container:hover{
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    transform: scale(1.01);
+}
+
+.train-container h2{
+    margin:0;
+    background: var(--primary-font-color);
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    color:white;
+    width: 100%;
+    font-weight: 500;
+    font-size:20px;
+    padding: 0.5rem 0;
+    /* box-shadow: 0px 2px  black;; */
+}
+
+.train-details{
+    padding:0.5rem;
+    /* flex-grow: 1; */
+}
+
+.train-container button{
+    width:150px;
+    box-sizing: border-box;
+    padding: 0.5rem 1rem; 
+    margin-bottom: 1rem;;
+}
+
+.train-container button a{
+    box-sizing: border-box;
+    display: inline-block;
+    padding:0.5rem 1.2rem;
+    font-size: 16px;
+    width: 150px;
+}
+
+.train-sub-head{
+    font-size:18px;
+    font-weight: bold;
+    color:black
+}
+
+.train-days{
+    font-weight: 700;
+    /* -webkit-text-stroke: 0.5px black; */
+}
+
+.running-days{
+    background-color: #4666a175;
+    color: white;
+    border-radius:10px;
+    padding: 0.25rem 0.5rem;
+}
+
+.secondary-go-home{
+    padding: 0.5rem;
+    margin-top:0.5rem;
+}
+
+@media only screen and (max-width:1024px) and (min-width:690px) {
+    .train-btwn-stn-container{
+        width:90%;
+    }
+
+    .train-container{
+        width:40%;
+    }
+
+    .train-btwn-stn-container h1{
+        font-size: 1.5rem;
+    }
+}
+
+@media only screen and (max-width:690px) and (min-width:570px) {
+    .train-btwn-stn-container{
+        width:95%;
+    }
+
+    .train-container{
+        width:45%;
+    }
+
+    .train-btwn-stn-container h1{
+        font-size: 1.5rem;
+    }
+
+    .train-container h2{
+        font-size: 18px;
+    }
+
+    .train-sub-head{
+        font-size: 16px;
+    }
+}
+
+@media only screen and (max-width:570px) and (min-width:100px) {
+    .train-btwn-stn-container{
+        width:99%;
+    }
+
+    .train-container{
+        width:85%;
+    }
+
+    .train-btwn-stn-container h1{
+        font-size: 1.4rem;
+    }
+
+    .train-container h2{
+        font-size: 17px;
+    }
+
+    .train-sub-head{
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width:450px) {
+    .to{
+        margin-right:5rem;
+    }
+}

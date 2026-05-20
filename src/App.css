@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=KoHo:wght@200;300;400;500;600;700&display=swap');
+
+@import url('./pages/Home.css');
+@import url('./pages/TrainBetweenStations.css');
+@import url('./pages/TrainDetails.css');
+@import url('./pages//Loader.css');
+@import url('./pages/Error.css');
+@import url('./pages/ReturnHome.css');
+@import url('./pages/Footer.css');
+@import url('./pages//ShareIcon.css');
+@import url('./pages/alert.css');
+:root{
+  margin:0;
+  padding:0;
+  --primary-font-color: #2B4577;
+  --primary-input-bg: #D9D9D9;
+  color: var(--primary-font-color);
+}
+
+body{
+  font-family: 'KoHo', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+input {
+  background: var(--primary-input-bg);
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  display: block;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0.5rem 1rem;
+  color: var(--primary-font-color);
+  width:100%;
+}
+
+input:focus{
+  border:none;
+  outline: none;
+}
+
+button{
+  color: white;
+  border:none;
+  background:var(--primary-font-color) ;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:hover{
+  transform: scale(1.01);
+    box-shadow:  4px 4px 4px rgba(0, 0, 0, 0.25);
+}

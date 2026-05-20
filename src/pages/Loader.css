@@ -1,0 +1,34 @@
+.loader-div{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height: 100%;
+    background: rgba(128, 128, 128, 0.501);
+    display: flex;
+    z-index: 1;
+}
+
+.loader-div img{
+    display: block;
+    margin:auto;
+    animation: blinker 500ms infinite;
+}
+
+@keyframes blinker{
+    0%{
+        opacity: 1;
+    }
+    60%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+@media only screen and (max-width:570px) and (min-width:100px){
+    .loader-div img{
+        width:50%;
+    }
+}
