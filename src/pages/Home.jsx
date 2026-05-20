@@ -9,7 +9,7 @@ import { Loader } from "./Loader";
 import { useTrainAndStation } from "..";
 import { ChoiceOption } from "../components/ChoiceBox";
 import { ShareBtn } from "./ShareIcon";
-import { AlertPop } from "./alert";
+//import { AlertPop } from "./alert";
 
 const generateDate = () => {
   const yyyy = new Date().getFullYear();

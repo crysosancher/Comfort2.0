@@ -57,6 +57,7 @@ export const TrainBetweenStations = () => {
     }
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     fetchTrainsBetweenStations();
   }, []);
@@ -164,6 +165,7 @@ export const TrainBetweenStations = () => {
                 </div>
               );
             }
+            return null;
           }
         )}
       </section>

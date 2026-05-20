@@ -8,6 +8,6 @@ export const ShareBtn = () => {
     }
 
     return <div className='share-btn' onClick={handleShare} title='Share' >
-        <img src={shareSvg} />
+        <img src={shareSvg} alt="Share" />
     </div>
 }
