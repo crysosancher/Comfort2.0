@@ -11,19 +11,6 @@
   --dot-border: #999;
 }
 
-.dark {
-  --bg-primary: #1a1a2e;
-  --bg-secondary: #16213e;
-  --text-primary: #e4e4e4;
-  --text-secondary: #b0b0b0;
-  --border-color: #3a3a5a;
-  --primary-font-color: #6fa8dc;
-  --route-accent: #46b36b;
-  --multi-accent: #5aa9ff;
-  --dot-bg: #2f2f42;
-  --dot-border: #44475a;
-}
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
