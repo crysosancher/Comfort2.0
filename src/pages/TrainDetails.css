@@ -1,20 +1,20 @@
-.train-coach-details{
+.train-coach-details {
     text-align: center;
-    width:80%;
+    width: 80%;
     margin: auto;
 }
 
-.train-coach-details h2{
+.train-coach-details h2 {
     font-weight: 500;
     margin: 1.5rem;
     text-decoration: underline;
 }
 
-.choice-btn{
+.choice-btn {
     background: none;
     color: currentColor;
     display: inline-block;
-    border:1px solid var(--primary-font-color);
+    border: 1px solid var(--primary-font-color);
     font-size: 20px;
     padding: 1rem;
     border-radius: 10px;
@@ -23,15 +23,15 @@
     font-weight: bold;
 }
 
-.choice-btn-active{
+.choice-btn-active {
     background-color: var(--primary-font-color);
-    color:white;
+    color: var(--bg-primary);
 }
 
-.choice-btn:hover{
+.choice-btn:hover {
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
     background: var(--primary-font-color);
-    color:white;
+    color: var(--bg-primary);
     transform: scale(1.01);
 }
 
@@ -49,114 +49,114 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    margin: 1rem auto;
-    width:29%;
-    border:2px solid var(--primary-font-color);
-    border-radius: 10px;
+    margin: 0.5rem auto;
+    width: 29%;
+    border: 1px solid var(--primary-font-color);
+    border-radius: 6px;
 }
 
-.berth-number{
-    margin:0;
+.berth-number {
+    margin: 0;
     background: var(--primary-font-color);
-    border-top-left-radius: 9px;
-    border-top-right-radius: 9px;
-    color:white;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    color: var(--bg-primary);
     width: 100%;
     font-weight: 500;
-    font-size:20px;
-    padding: 0.5rem 0;
+    font-size: 14px;
+    padding: 0.35rem 0;
 }
 
 @media only screen and (max-width:1024px) and (min-width:690px) {
-    .train-coach-details{
-        width:90%;
+    .train-coach-details {
+        width: 90%;
     }
 
-    .train-coach-details h1{
+    .train-coach-details h1 {
         margin-top: 2rem;
     }
 
-    .train-coach-details h2{
-        margin:1rem;
+    .train-coach-details h2 {
+        margin: 1rem;
     }
 
-    .choice-btn{
+    .choice-btn {
         font-size: 18px;
-        margin:0.75rem;
-        padding:0.25 0.75rem;
+        margin: 0.75rem;
+        padding: 0.25 0.75rem;
     }
 
-    .berth-number{
+    .berth-number {
         font-size: 16px;
     }
 }
 
 
 @media only screen and (max-width:690px) and (min-width:490px) {
-    .train-coach-details{
-        width:95%;
+    .train-coach-details {
+        width: 95%;
     }
 
-    .train-coach-details h1{
+    .train-coach-details h1 {
         font-size: 1.85rem;
-        margin:1.35rem;
-        margin-top:2rem;
+        margin: 1.35rem;
+        margin-top: 2rem;
     }
 
-    .train-coach-details h2{
+    .train-coach-details h2 {
         font-size: 1.35rem;
-        margin:0.75rem;
+        margin: 0.75rem;
     }
 
-    .choice-btn{
+    .choice-btn {
         font-size: 16px;
-        margin:0.55rem;
-        padding:0.15 0.55rem;
+        margin: 0.55rem;
+        padding: 0.15 0.55rem;
     }
 
-    .train-coach-details li{
-        width:45%;
+    .train-coach-details li {
+        width: 45%;
         margin: 0.5rem auto;
     }
 
-    .berth-number{
+    .berth-number {
         font-size: 16px;
     }
 }
 
 @media only screen and (max-width:490px) and (min-width:100px) {
-    .train-coach-details{
-        width:98%;
+    .train-coach-details {
+        width: 98%;
     }
 
-    .train-coach-details h1{
+    .train-coach-details h1 {
         font-size: 1.65rem;
-        margin:1rem;
-        margin-top:2rem;
+        margin: 1rem;
+        margin-top: 2rem;
     }
 
-    .train-coach-details h2{
+    .train-coach-details h2 {
         font-size: 1rem;
-        margin:0.5rem;
+        margin: 0.5rem;
     }
 
-    .choice-btn{
+    .choice-btn {
         font-size: 14px;
-        margin:0.35rem;
-        padding:0.45rem;
+        margin: 0.35rem;
+        padding: 0.45rem;
     }
 
-    .train-coach-details li{
-        width:85%;
+    .train-coach-details li {
+        width: 85%;
         margin: 0.5rem auto;
     }
-    
-    .berth-number{
+
+    .berth-number {
         font-size: 14px;
     }
 }
 
-.border{
+.border {
     border: 2px solid currentColor;
     width: fit-content;
     margin: auto;
@@ -165,69 +165,420 @@
     border-radius: 10px;
 }
 
-.seats-count{
-    font-weight:300;
-    font-size:16px;
+.seats-count {
+    font-weight: 300;
+    font-size: 16px;
 }
 
-.review-background{
+.review-background {
     position: fixed;
-    z-index:10;
+    z-index: 10;
     inset: 0;
     background: rgba(156, 144, 144, 0.373);
 }
 
-.review-modal{
-    box-shadow: 2px 2px 10px 5px gray;
-    border: 2px solid currentColor;
-    border-radius:15px;
-    width:90%;
-    max-width:400px;
-    margin:auto;
+.review-modal {
+    box-shadow: 2px 2px 10px 5px rgba(0, 0, 0, 0.3);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
     position: absolute;
     left: 0;
     right: 0;
     top: 30%;
-    background-color: white;
-    & .title{
-        border-bottom: 1px solid currentColor;
+    background-color: var(--bg-primary);
+
+    & .title {
+        border-bottom: 1px solid var(--border-color);
         padding: 0.5rem;
         font-size: 22px;
         font-weight: 600;
+        color: var(--text-primary);
     }
 
-    & .text-message{
+    & .text-message {
         margin: 0.5rem 0;
         padding: 0.5rem;
         word-spacing: 3px;
+        color: var(--text-secondary);
     }
 
-    & .btn-container{
+    & .btn-container {
         margin: 0.5rem 0 1rem;
     }
 
-    & button{
+    & button {
         margin: 0 0.5rem;
         padding: 0.5rem 0.75rem;
     }
 
-    & button:last-of-type{
+    & button:last-of-type {
         background-color: transparent;
-        color: currentColor;
-        border: 1px solid currentColor
+        color: var(--primary-font-color);
+        border: 1px solid var(--primary-font-color)
     }
 
-    & a{
+    & a {
         padding: 0.5rem 0.75rem;
-        width:100%;
+        width: 100%;
         text-decoration: none;
-        color: white;
+        color: var(--bg-primary);
     }
 }
 
-.toggle-container{
+.toggle-container {
     display: flex;
     justify-content: center;
     font-size: 20px;
     gap: 0.5rem;
+}
+
+.sort-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    gap: 0.4rem;
+    margin-bottom: 0.75rem;
+}
+
+.sort-btn {
+    background: var(--bg-primary);
+    border: 1px solid var(--primary-font-color);
+    color: var(--primary-font-color);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.8rem;
+}
+
+.sort-btn.active {
+    background: var(--primary-font-color);
+    color: var(--bg-primary);
+}
+
+.sort-btn:hover {
+    background: var(--primary-font-color);
+    color: var(--bg-primary);
+}
+
+.sort-direction {
+    background: var(--bg-primary);
+    border: 1px solid var(--primary-font-color);
+    color: var(--primary-font-color);
+    padding: 0.3rem 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.75rem;
+    min-width: 50px;
+}
+
+.sort-direction:hover {
+    background: var(--primary-font-color);
+    color: var(--bg-primary);
+}
+
+/* Route Visualization Styles */
+.route-visualization {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    margin: 0.75rem auto;
+    max-width: 600px;
+}
+
+.route-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding: 0.25rem 0;
+}
+
+.route-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--primary-font-color);
+}
+
+.route-toggle {
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+}
+
+.route-toggle.open {
+    transform: rotate(180deg);
+}
+
+.route-stations {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.route-station {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    padding: 0.2rem 0;
+}
+
+.station-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--dot-bg);
+    border: 2px solid var(--dot-border);
+    flex-shrink: 0;
+    margin-top: 3px;
+    z-index: 1;
+}
+
+.route-station.boarding .station-dot {
+    background: var(--primary-font-color);
+    border-color: var(--primary-font-color);
+}
+
+.route-station.destination .station-dot {
+    background: var(--route-accent);
+    border-color: var(--route-accent);
+}
+
+.route-station.after-boarding .station-dot {
+    background: var(--multi-accent);
+    border-color: var(--multi-accent);
+}
+
+.station-connector {
+    position: absolute;
+    left: 5px;
+    top: 16px;
+    width: 2px;
+    height: 20px;
+    background: var(--border-color);
+}
+
+.route-station.after-boarding .station-connector {
+    background: var(--multi-accent);
+}
+
+.station-info {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.station-code {
+    font-weight: bold;
+    color: var(--primary-font-color);
+    font-size: 0.85rem;
+}
+
+.station-name {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.station-time {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.station-badge {
+    background: var(--primary-font-color);
+    color: var(--bg-primary);
+    padding: 0.05rem 0.3rem;
+    border-radius: 3px;
+    font-size: 0.65rem;
+    font-weight: bold;
+}
+
+/* Compact recommendation flow (A -> B -> C) */
+.recommendations-section .rec-flow {
+    margin: 0.75rem auto 1rem;
+    max-width: 900px;
+}
+
+.rec-steps {
+    list-style: none;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+}
+
+.rec-step {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    min-width: 180px;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.step-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-font-color);
+    color: white;
+    font-weight: 700;
+}
+
+.step-body {
+    text-align: left;
+}
+
+.seat-line {
+    font-weight: 600;
+    font-size: 0.96rem;
+}
+
+.seat-sub {
+    color: var(--text-secondary);
+    font-size: 0.82rem;
+}
+
+.route-line {
+    color: var(--route-accent);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+.step-arrow {
+    margin-left: 0.4rem;
+    margin-right: -0.4rem;
+    color: var(--primary-font-color);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+@media only screen and (max-width:690px) {
+    .rec-steps {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .rec-step {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .step-arrow {
+        display: none;
+    }
+}
+
+.route-station.destination .station-badge {
+    background: var(--route-accent);
+}
+
+.route-station.after-boarding .station-name,
+.route-station.after-boarding .station-time {
+    color: var(--text-primary);
+}
+
+/* Seat Recommendations Styles */
+.recommendations-section {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    margin: 0.75rem auto;
+    max-width: 600px;
+}
+
+.recommendations-section h3 {
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+}
+
+.recommendation-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--route-accent);
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.recommendation-card:last-child {
+    margin-bottom: 0;
+}
+
+.recommendation-card.multi {
+    border-left-color: var(--multi-accent);
+}
+
+.recommendation-card.direct {
+    border-left-color: var(--route-accent);
+}
+
+.rec-description {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 0.5rem 0;
+    font-size: 0.85rem;
+}
+
+.rec-seat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rec-seat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85rem;
+}
+
+.rec-seat-item:last-child {
+    border-bottom: none;
+}
+
+.rec-coach {
+    background: var(--primary-font-color);
+    color: var(--bg-primary);
+    padding: 0.1rem 0.4rem;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.75rem;
+}
+
+.rec-berth {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.rec-type {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.rec-route {
+    margin-left: auto;
+    color: var(--route-accent);
+    font-weight: 600;
+    font-size: 0.8rem;
 }
