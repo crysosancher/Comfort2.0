@@ -117,6 +117,7 @@ export const TrainAndStationProvider = ({children}) => {
         }
     }
 
+    /* eslint-disable react-hooks/exhaustive-deps */
     useEffect( ()=>{
         fetchStations();
         fetchTrains();

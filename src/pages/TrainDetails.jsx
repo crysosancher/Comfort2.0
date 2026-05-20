@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useReducer, useState } from "react";
 import axios from "axios";
-import ToggleButton from "react-toggle-button";
 
 import { ReturnHome } from "./ReturnHome";
 import { Loader } from "./Loader";
@@ -460,6 +459,7 @@ export const TrainDetails = () => {
                 return -1;
               }
             }
+            return 0;
           }),
         ),
       });
@@ -482,6 +482,7 @@ export const TrainDetails = () => {
               return -1;
             }
           }
+          return 0;
         }),
       });
     }
@@ -507,6 +508,7 @@ export const TrainDetails = () => {
               <a
                 href="https://play.google.com/store/apps/details?id=app.comfortjourney.android&hl=en_US"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 {" "}
                 Rate Now{" "}
@@ -556,6 +558,7 @@ export const TrainDetails = () => {
     updateTrainComposition({ type: "seats_to_show", availableSeats: sorted });
   };
 
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     fetchRoute();
     fetchTrainComposition();
@@ -595,6 +598,7 @@ export const TrainDetails = () => {
         }
       }
     }
+  /* eslint-disable react-hooks/exhaustive-deps */
   }, [selectedCoachType, fetchedSeatsData, routeData, toStationCode]);
 
   return (
