@@ -8,6 +8,130 @@ import { Loader } from './Loader';
 import { ShareBtn } from './ShareIcon';
 import { useTrainAndStation } from "..";
 
+// Recommendation algorithm
+const findBestSeatCombinations = (seats, fromStation, toStation, routeData) => {
+    if (!seats || seats.length === 0 || !routeData || routeData.length === 0) return [];
+
+    // Get station sequence indices
+    const fromIndex = routeData.findIndex(s => s.source_stn_code === fromStation);
+    const toIndex = routeData.findIndex(s => s.source_stn_code === toStation);
+
+    if (fromIndex === -1 || toIndex === -1 || fromIndex >= toIndex) return [];
+
+    // Filter seats that have some availability in our journey range
+    const availableSeats = seats.filter(seat => {
+        const seatFromIdx = routeData.findIndex(s => s.source_stn_code === seat.from);
+        const seatToIdx = routeData.findIndex(s => s.source_stn_code === seat.to);
+        // Seat is useful if it covers at least part of our journey
+        return seatFromIdx !== -1 && seatToIdx !== -1 && seatFromIdx <= toIndex && seatToIdx > fromIndex;
+    });
+
+    if (availableSeats.length === 0) return [];
+
+    // Find consecutive seat combinations that cover the full journey
+    const recommendations = [];
+    const journey = routeData.slice(fromIndex, toIndex + 1);
+    const journeyStations = journey.map(s => s.source_stn_code);
+
+    // Group seats by coach for analysis
+    const seatsByCoach = {};
+    availableSeats.forEach(seat => {
+        if (!seatsByCoach[seat.coachName]) seatsByCoach[seat.coachName] = [];
+        seatsByCoach[seat.coachName].push(seat);
+    });
+
+    // Try to find a single seat that covers the entire journey
+    const fullJourneySeats = availableSeats.filter(seat => {
+        const seatFromIdx = routeData.findIndex(s => s.source_stn_code === seat.from);
+        const seatToIdx = routeData.findIndex(s => s.source_stn_code === seat.to);
+        return seatFromIdx <= fromIndex && seatToIdx >= toIndex;
+    });
+
+    if (fullJourneySeats.length > 0) {
+        recommendations.push({
+            type: 'single',
+            description: `Direct seat available for full journey (${fromStation} → ${toStation})`,
+            seats: fullJourneySeats.slice(0, 3).map(s => ({
+                coach: s.coachName,
+                berth: s.berthNumber,
+                berthType: s.berthCode ? GIVE_BERTH_NAME(s.berthCode) : 'Coach',
+                from: s.from,
+                to: routeData.findIndex(st => st.source_stn_code === s.to) > toIndex ? toStation : s.to
+            }))
+        });
+    }
+
+    // Find multi-hop recommendations (if no single seat covers everything)
+    if (recommendations.length === 0) {
+        // For each seat, calculate what portion of journey it covers
+        const seatCoverage = availableSeats.map(seat => {
+            const seatFromIdx = routeData.findIndex(s => s.source_stn_code === seat.from);
+            const seatToIdx = routeData.findIndex(s => s.source_stn_code === seat.to);
+            const coveredFrom = Math.max(fromIndex, seatFromIdx);
+            const coveredTo = Math.min(toIndex, seatToIdx);
+            const coverageLength = coveredTo - coveredFrom + 1;
+            return { ...seat, coverageStart: coveredFrom, coverageEnd: coveredTo, coverageLength };
+        });
+
+        // Sort by coverage length descending
+        seatCoverage.sort((a, b) => b.coverageLength - a.coverageLength);
+
+        // Build recommendations by greedy approach - pick best seat, then find connecting seats
+        const remainingJourney = [...journeyStations];
+        const selectedSeats = [];
+        let lastToIdx = fromIndex - 1; // Track the last "to" index used
+
+        seatCoverage.forEach(seat => {
+            if (remainingJourney.length === 0) return;
+
+            const seatFromIdx = routeData.findIndex(s => s.source_stn_code === seat.from);
+            const seatToIdx = routeData.findIndex(s => s.source_stn_code === seat.to);
+
+            // Skip if seat starts before or at our current position (no going backwards)
+            if (seatFromIdx <= lastToIdx) return;
+
+            // Check if this seat can help with remaining journey
+            const neededIdx = remainingJourney.findIndex(stn =>
+                routeData.findIndex(r => r.source_stn_code === stn) >= seatFromIdx
+            );
+
+            if (neededIdx !== -1) {
+                const actualFrom = remainingJourney[neededIdx];
+                const actualFromIdx = routeData.findIndex(s => s.source_stn_code === actualFrom);
+
+                if (seatFromIdx <= actualFromIdx && seatToIdx > actualFromIdx) {
+                    selectedSeats.push({
+                        ...seat,
+                        actualFrom: actualFrom,
+                        actualFromIdx: actualFromIdx
+                    });
+                    // Remove stations covered by this seat
+                    const seatEndIdx = routeData.findIndex(s => s.source_stn_code === seat.to);
+                    remainingJourney.splice(neededIdx, seatEndIdx - neededIdx + 1);
+                    lastToIdx = seatToIdx; // Update our position
+                }
+            }
+        });
+
+        if (selectedSeats.length > 0) {
+            recommendations.push({
+                type: 'multi',
+                description: `Recommended seat combination for ${fromStation} → ${toStation}`,
+                seats: selectedSeats.slice(0, 5).map(s => ({
+                    coach: s.coachName,
+                    berth: s.berthNumber,
+                    berthType: s.berthCode ? GIVE_BERTH_NAME(s.berthCode) : 'Coach',
+                    from: s.actualFrom || s.from,
+                    to: routeData.findIndex(st => st.source_stn_code === s.to) > toIndex ? toStation : s.to,
+                    coverage: `${s.actualFrom || s.from} → ${routeData.findIndex(st => st.source_stn_code === s.to) > toIndex ? toStation : s.to}`
+                }))
+            });
+        }
+    }
+
+    return recommendations;
+}
+
 const handleTrains = (data,action) => {
     switch(action.type){
         case 'addData' : return({ ...data, allData: action.data, trainCoachType: action.coachTypeList });
@@ -21,6 +145,10 @@ const handleTrains = (data,action) => {
         case 'coach_number' : return({ ...data, selectedCoachNumber: action.newCoachNumber });
 
         case 'seats_to_show' : return({ ...data, seatsToShow: action.availableSeats });
+
+        case 'route_data' : return({ ...data, routeData: action.routeData });
+
+        case 'recommendations' : return({ ...data, seatRecommendations: action.recommendations });
 
         default: throw Error( `SOme error occured in handlering train data, action type: ${action.type}` );
     }
@@ -55,15 +183,28 @@ export const TrainDetails = () => {
     const [ isLoading, setLoading ] = useState(false);
     const [ showReviewModal ,setShowReviewModal ] = useState(false);
 
-    const { trainsAndStationData: { jDate, showAllVacant } } = useTrainAndStation();
+    const { trainsAndStationData: { jDate, showAllVacant, toStationCode } } = useTrainAndStation();
 
     const [trainNumber, trainName,  fromSTN] = [...trainNo.split('from')[0].split('-'), trainNo.split('from')[1]]
 
-    const [ { trainCoachType, filteredCoachList, selectedCoachType, fetchedSeatsOfCoachType, fetchedSeatsData, selectedCoachNumber, seatsToShow, }, updateTrainComposition ] = useReducer(handleTrains, ({ allData: [],  trainCoachType: [], selectedCoachType: '', filteredCoachList: [], coachComposition: [], fetchedSeatsOfCoachType: [], fetchedSeatsData: {}, selectedCoachNumber: '', seatsToShow: [] }));
+    const [ { trainCoachType, filteredCoachList, selectedCoachType, fetchedSeatsOfCoachType, fetchedSeatsData, selectedCoachNumber, seatsToShow, routeData, seatRecommendations }, updateTrainComposition ] = useReducer(handleTrains, ({ allData: [],  trainCoachType: [], selectedCoachType: '', filteredCoachList: [], coachComposition: [], fetchedSeatsOfCoachType: [], fetchedSeatsData: {}, selectedCoachNumber: '', seatsToShow: [], routeData: [], seatRecommendations: [] }));
 
     const setTrainsData = list => updateTrainComposition({ type: 'addData', data: list, coachTypeList: list?.reduce( (accu,{classCode}) =>  accu.includes(classCode)? accu: [...accu, classCode],[]) });
 
     const [sortAscending, setSortAscending] = useState(true);
+    const [sortType, setSortType] = useState('seatNumber'); // 'seatNumber' or 'distance'
+
+    const fetchRoute = async() => {
+        try{
+            const res = await axios(`https://little-katlin-crysosancher-e5eb62fd.koyeb.app/trains/getRoute?trainNo=${trainNumber}`);
+            if(res.data.success){
+                updateTrainComposition({ type: 'route_data', routeData: res.data.data });
+            }
+        }
+        catch(error){
+            console.log('Route fetch error:', error);
+        }
+    }
 
     const fetchTrainComposition = async() => {
         setLoading(true);
@@ -96,7 +237,7 @@ export const TrainDetails = () => {
                         updateTrainComposition({ type: 'fetched_seats_data', newSeats: { [givenCoachType]: beautifyData(res.data.vbd)} });
                     }
                     else{
-                        updateTrainComposition({ type: 'fetched_seats_data', newSeats: { [givenCoachType]: beautifyData(res.data.vbd.filter( ({from}) => from === fromSTN ) ) } });
+                        updateTrainComposition({ type: 'fetched_seats_data', newSeats: { [givenCoachType]: beautifyData(res.data.vbd)} });
                     }
                   
                 }
@@ -107,7 +248,7 @@ export const TrainDetails = () => {
                         updateTrainComposition({ type: 'fetched_seats_data', newSeats: { [givenCoachType]: beautifyData(res.data.vbd)} });
                     }
                     else{
-                        updateTrainComposition({ type: 'fetched_seats_data', newSeats: { [givenCoachType]: beautifyData(res.data.vbd.filter( ({from}) => from === fromSTN ) )} });
+                        updateTrainComposition({ type: 'fetched_seats_data', newSeats: { [givenCoachType]: beautifyData(res.data.vbd)} });
                     }
                 }
             }
@@ -118,7 +259,7 @@ export const TrainDetails = () => {
                 setLoading(false);
             }
         }
-       
+
     }
 
   const fetchTotal = () => Object?.keys(fetchedSeatsData?.[selectedCoachType])?.reduce( (total,current) => total+ fetchedSeatsData[selectedCoachType][current].length ,0 );
@@ -177,28 +318,123 @@ export const TrainDetails = () => {
         </div>
     }
 
+    const handleSortTypeChange = (type) => {
+        setSortType(type);
+        const sorted = [...seatsToShow].sort((a, b) => {
+            if (type === 'seatNumber') {
+                const aNum = parseInt(a.berthNumber) || 0;
+                const bNum = parseInt(b.berthNumber) || 0;
+                return sortAscending ? aNum - bNum : bNum - aNum;
+            } else if (type === 'distance') {
+                const aToIdx = routeData.findIndex(s => s.source_stn_code === a.to);
+                const bToIdx = routeData.findIndex(s => s.source_stn_code === b.to);
+                return sortAscending ? aToIdx - bToIdx : bToIdx - aToIdx;
+            }
+            return 0;
+        });
+        updateTrainComposition({ type: 'seats_to_show', availableSeats: sorted });
+    };
+
     const handleToggle = () => {
-        if(!sortAscending){
-            updateTrainComposition({ type: 'seats_to_show', availableSeats: seatsToShow.toSorted( (a,b) => a.to > b.to ? 1 : -1 ) })
-        }
-        else{
-            updateTrainComposition({ type: 'seats_to_show', availableSeats: seatsToShow.toSorted( (a,b) => b.to > a.to ? 1 : -1 ) })
-        }
-        setSortAscending( value => !value );
+        setSortAscending(value => !value);
+        const sorted = [...seatsToShow].sort((a, b) => {
+            if (sortType === 'seatNumber') {
+                const aNum = parseInt(a.berthNumber) || 0;
+                const bNum = parseInt(b.berthNumber) || 0;
+                return !sortAscending ? aNum - bNum : bNum - aNum;
+            } else if (sortType === 'distance') {
+                const aToIdx = routeData.findIndex(s => s.source_stn_code === a.to);
+                const bToIdx = routeData.findIndex(s => s.source_stn_code === b.to);
+                return !sortAscending ? aToIdx - bToIdx : bToIdx - aToIdx;
+            }
+            return 0;
+        });
+        updateTrainComposition({ type: 'seats_to_show', availableSeats: sorted });
     }
 
     useEffect( () => {
+        fetchRoute();
         fetchTrainComposition();
         setTimeout( () => setShowReviewModal(true) , 25000 );
     } ,[] )
-    
+
+    // Compute seat recommendations when we have seats data for selected coach
+    useEffect(() => {
+        if (selectedCoachType && fetchedSeatsData[selectedCoachType] && routeData.length > 0 && toStationCode) {
+            // Get seats only from the selected coach type
+            const coachSeats = Object.values(fetchedSeatsData[selectedCoachType]).flat();
+
+            if (coachSeats.length > 0) {
+                const recs = findBestSeatCombinations(coachSeats, fromSTN, toStationCode, routeData);
+                if (recs.length > 0) {
+                    updateTrainComposition({ type: 'recommendations', recommendations: recs });
+                } else {
+                    updateTrainComposition({ type: 'recommendations', recommendations: [] });
+                }
+            }
+        }
+    }, [selectedCoachType, fetchedSeatsData, routeData, toStationCode]);
+
     return <div className='train-coach-details' >
             <ReturnHome/>
             <ReviewModal />
             <ShareBtn />
             { isLoading && <Loader/> }
-            
+
         <h1>{trainNumber} - {trainName}</h1>
+
+        {/* Route Visualization */}
+        { routeData?.length > 0 && (
+            <div className='route-visualization'>
+                <h3>Train Route ({routeData.length} stops)</h3>
+                <div className='route-stations'>
+                    {routeData.map((station, index) => {
+                        const isBoarding = station.source_stn_code === fromSTN;
+                        const isDestination = index === routeData.length - 1;
+                        const isAfterBoarding = routeData.findIndex(s => s.source_stn_code === fromSTN) < index;
+
+                        return (
+                            <div key={index} className={`route-station ${isBoarding ? 'boarding' : ''} ${isDestination ? 'destination' : ''} ${isAfterBoarding ? 'after-boarding' : ''}`}>
+                                <div className='station-dot'></div>
+                                <div className='station-info'>
+                                    <span className='station-code'>{station.source_stn_code}</span>
+                                    <span className='station-name'>{station.source_stn_name}</span>
+                                    {station.arrive !== 'First' && station.arrive !== 'Last' && (
+                                        <span className='station-time'>{station.arrive}</span>
+                                    )}
+                                    {isBoarding && <span className='station-badge'>BOARDING</span>}
+                                    {isDestination && <span className='station-badge'>DESTINATION</span>}
+                                </div>
+                                {index < routeData.length - 1 && <div className='station-connector'></div>}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        )}
+
+        {/* Seat Recommendations */}
+        { seatRecommendations?.length > 0 && (
+            <div className='recommendations-section'>
+                <h3>Recommended Seats for {fromSTN} → {toStationCode || 'Destination'}</h3>
+                {seatRecommendations.map((rec, recIndex) => (
+                    <div key={recIndex} className={`recommendation-card ${rec.type === 'single' ? 'direct' : 'multi'}`}>
+                        <p className='rec-description'>{rec.description}</p>
+                        <ul className='rec-seat-list'>
+                            {rec.seats.map((seat, seatIdx) => (
+                                <li key={seatIdx} className='rec-seat-item'>
+                                    <span className='rec-coach'>{seat.coach}</span>
+                                    <span className='rec-berth'>Seat {seat.berth}</span>
+                                    <span className='rec-type'>{seat.berthType}</span>
+                                    <span className='rec-route'>{seat.coverage || `${seat.from} → ${seat.to}`}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
+        )}
+
         {/* <h3> Journey Date:  {jDate} </h3> */}
 
         { trainCoachType?.length!==0 && <h2> Please Select Coach Type </h2> }
@@ -220,8 +456,13 @@ export const TrainDetails = () => {
         { seatsToShow?.length!==0 && <h2> Available Seats </h2> }
 
         {
-            seatsToShow?.length!==0 && <div className='toggle-container' >
-            Sort By  <ToggleButton value={sortAscending} onToggle={ handleToggle } activeLabel={<p> A - Z </p>} inactiveLabel={<p> Z - A </p>} /> 
+            seatsToShow?.length!==0 && <div className='sort-container' >
+            <span>Sort By: </span>
+            <button className={`sort-btn ${sortType === 'seatNumber' ? 'active' : ''}`} onClick={() => handleSortTypeChange('seatNumber')}>Seat #</button>
+            <button className={`sort-btn ${sortType === 'distance' ? 'active' : ''}`} onClick={() => handleSortTypeChange('distance')}>Distance</button>
+            <button className='sort-direction' onClick={handleToggle}>
+                {sortAscending ? '↑ Asc' : '↓ Desc'}
+            </button>
           </div>
         }
          

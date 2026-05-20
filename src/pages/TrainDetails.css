@@ -231,3 +231,244 @@
     font-size: 20px;
     gap: 0.5rem;
 }
+
+.sort-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.sort-btn {
+    background: white;
+    border: 1px solid var(--primary-font-color);
+    color: var(--primary-font-color);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.sort-btn.active {
+    background: var(--primary-font-color);
+    color: white;
+}
+
+.sort-btn:hover {
+    background: var(--primary-font-color);
+    color: white;
+}
+
+.sort-direction {
+    background: white;
+    border: 1px solid var(--primary-font-color);
+    color: var(--primary-font-color);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    min-width: 60px;
+}
+
+.sort-direction:hover {
+    background: var(--primary-font-color);
+    color: white;
+}
+
+/* Route Visualization Styles */
+.route-visualization {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 600px;
+}
+
+.route-visualization h3 {
+    margin: 0 0 1rem 0;
+    color: var(--primary-font-color);
+    font-size: 1.1rem;
+}
+
+.route-stations {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.route-station {
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    padding: 0.25rem 0;
+}
+
+.station-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ccc;
+    border: 2px solid #999;
+    flex-shrink: 0;
+    margin-top: 4px;
+    z-index: 1;
+}
+
+.route-station.boarding .station-dot {
+    background: var(--primary-font-color);
+    border-color: var(--primary-font-color);
+}
+
+.route-station.destination .station-dot {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.route-station.after-boarding .station-dot {
+    background: #2196F3;
+    border-color: #2196F3;
+}
+
+.station-connector {
+    position: absolute;
+    left: 5px;
+    top: 16px;
+    width: 2px;
+    height: 20px;
+    background: #ddd;
+}
+
+.route-station.after-boarding .station-connector {
+    background: #2196F3;
+}
+
+.station-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.station-code {
+    font-weight: bold;
+    color: var(--primary-font-color);
+}
+
+.station-name {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.station-time {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.station-badge {
+    background: var(--primary-font-color);
+    color: white;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.route-station.destination .station-badge {
+    background: #4CAF50;
+}
+
+.route-station.after-boarding .station-name,
+.route-station.after-boarding .station-time {
+    color: #333;
+}
+
+/* Seat Recommendations Styles */
+.recommendations-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 600px;
+}
+
+.recommendations-section h3 {
+    color: white;
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+}
+
+.recommendation-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.recommendation-card:last-child {
+    margin-bottom: 0;
+}
+
+.recommendation-card.multi {
+    border-left: 4px solid #4CAF50;
+}
+
+.recommendation-card.direct {
+    border-left: 4px solid #2196F3;
+}
+
+.rec-description {
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 0.75rem 0;
+    font-size: 0.95rem;
+}
+
+.rec-seat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.rec-seat-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.rec-seat-item:last-child {
+    border-bottom: none;
+}
+
+.rec-coach {
+    background: var(--primary-font-color);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.rec-berth {
+    font-weight: 600;
+    color: #333;
+}
+
+.rec-type {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.rec-route {
+    margin-left: auto;
+    color: #4CAF50;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
