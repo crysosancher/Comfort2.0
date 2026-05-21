@@ -93,7 +93,7 @@ export const TrainBetweenStations = () => {
       );
       if (res.data.cdd) {
         handleShowAllVacant(false);
-        navigate(`/trains/${trainNumber}-${trainName}from${fromSTN}`);
+        navigate(`/trains/${trainNumber}-${trainName}from${fromSTN}to${toStationCode}`);
       } else {
         alert(res.data.error);
       }
