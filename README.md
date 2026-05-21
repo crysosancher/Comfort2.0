@@ -92,4 +92,4 @@ npm start
 
 ---
 
-*Project maintained by CRYSO Media — https://www.cryso.studio/*
+*Project maintained by CRYSO Media — https://www.crysomedia.com/*
