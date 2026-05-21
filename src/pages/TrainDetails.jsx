@@ -269,7 +269,7 @@ export const TrainDetails = () => {
   const [recsOpen, setRecsOpen] = useState(true);
 
   const {
-    trainsAndStationData: { jDate, showAllVacant, toStationCode },
+    trainsAndStationData: { jDate, showAllVacant },
   } = useTrainAndStation();
 
   const [trainNumber, trainName, fromSTN, toStationCodeFromURL] = [
