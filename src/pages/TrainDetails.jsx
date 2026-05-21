@@ -272,9 +272,10 @@ export const TrainDetails = () => {
     trainsAndStationData: { jDate, showAllVacant, toStationCode },
   } = useTrainAndStation();
 
-  const [trainNumber, trainName, fromSTN] = [
+  const [trainNumber, trainName, fromSTN, toStationCodeFromURL] = [
     ...trainNo.split("from")[0].split("-"),
-    trainNo.split("from")[1],
+    trainNo.split("from")[1]?.split("to")[0],
+    trainNo.split("from")[1]?.split("to")[1],
   ];
 
   const [
@@ -571,7 +572,7 @@ export const TrainDetails = () => {
       selectedCoachType &&
       fetchedSeatsData[selectedCoachType] &&
       routeData.length > 0 &&
-      toStationCode
+      toStationCodeFromURL
     ) {
       // Get seats only from the selected coach type
       const coachSeats = Object.values(
@@ -582,7 +583,7 @@ export const TrainDetails = () => {
         const recs = findBestSeatCombinations(
           coachSeats,
           fromSTN,
-          toStationCode,
+          toStationCodeFromURL,
           routeData,
         );
         if (recs.length > 0) {
@@ -599,7 +600,7 @@ export const TrainDetails = () => {
       }
     }
   /* eslint-disable react-hooks/exhaustive-deps */
-  }, [selectedCoachType, fetchedSeatsData, routeData, toStationCode]);
+  }, [selectedCoachType, fetchedSeatsData, routeData, toStationCodeFromURL]);
 
   return (
     <div className="train-coach-details">
@@ -671,7 +672,7 @@ export const TrainDetails = () => {
         <div className="recommendations-section">
           <div className="route-header" onClick={() => setRecsOpen(!recsOpen)}>
             <h3>
-              Recommended Seats ({fromSTN} → {toStationCode || "Destination"})
+              Recommended Seats ({fromSTN} → {toStationCodeFromURL || "Destination"})
             </h3>
             <span className={`route-toggle ${recsOpen ? "open" : ""}`}>▼</span>
           </div>

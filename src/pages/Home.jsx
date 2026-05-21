@@ -147,7 +147,7 @@ export const Home = () => {
             navigate(
               `/trains/${trainSearchText.replace(" ", "")}from${
                 trainInfo.data.data.from_stn_code
-              }`
+              }to${trainInfo.data.data.to_stn_code}`
             );
           } else {
             alert(res.data.error);
